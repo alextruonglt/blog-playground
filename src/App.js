@@ -8,6 +8,8 @@ function App() {
   const [text, setText] = useState("")
   const [author, setAuthor]= useState("")
   const [list, setList] = useState([])
+  const [isEditing, setisEditing]= useState(false)
+  const [editId, setEditId] = useState(null)
 
 
   
@@ -19,7 +21,21 @@ function App() {
 
       if(!text || !author){
         alert("Please enter both values")
-      } else{
+      } else if(isEditing){
+
+        setList(list.map((item) => {
+          if(item.id === editId){
+            return {...list, author: author, text:text}
+          }
+          return list
+        }))
+        setText("")
+        setAuthor("")
+        setEditId(null)
+        setisEditing(false)
+
+
+      }else{
         setList(prevList => {
           return [...prevList, newItem]
         })
@@ -41,7 +57,17 @@ function App() {
     setList("")
   }
 
-  const handleEdit = () =>{
+  const handleEdit = (id) =>{
+    const specificItem = list.find((item) =>{
+      return item.id === id
+    })
+
+    console.log( specificItem.author)
+    setEditId(id)
+    setText(specificItem.text)
+    setAuthor(specificItem.author)
+    setisEditing(true)
+     
 
   }
   
