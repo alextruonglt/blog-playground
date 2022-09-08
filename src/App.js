@@ -1,13 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { Item } from "./Item";
 
+
+
+const getLocalStorage = () =>{
+  let list = localStorage.getItem("list")
+
+  if(list){
+    return JSON.parse(localStorage.getItem("list"))
+  } else{
+    return []
+  }
+}
 
 function App() {
 
   const [text, setText] = useState("")
   const [author, setAuthor]= useState("")
-  const [list, setList] = useState([])
+  const [list, setList] = useState(getLocalStorage())
   const [isEditing, setisEditing]= useState(false)
   const [editId, setEditId] = useState(null)
 
@@ -67,9 +78,12 @@ function App() {
     setText(specificItem.text)
     setAuthor(specificItem.author)
     setisEditing(true)
-     
-
   }
+
+  useEffect(() =>{
+    localStorage.setItem("list", JSON.stringify(list))
+  },[list])
+
   
   return (
     <>
